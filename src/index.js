@@ -4,6 +4,7 @@ const axios = require("axios");
 const cors = require("cors");
 const helmet = require("helmet");
 
+require("dotenv").config();
 const app = express();
 // adding Helmet to enhance your Rest API's security
 app.use(helmet());
@@ -28,7 +29,7 @@ app.get("/lead_members/:id", async (req, res) => {
   };
   const response = await axios({
     method: "POST",
-    url: `https://admCouch:Qz52S6tK3u@uat-tls.couch.efishery.com/leads_members/_find`,
+    url: `${process.env.API_MEMBER_KABAYAN_UAT_COUCHDB}`,
     data: body,
     withCredentials: false,
     headers: {
