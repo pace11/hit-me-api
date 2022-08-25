@@ -11,6 +11,9 @@ app.use(helmet());
 app.use(bodyParser.json());
 // enabling CORS for all requests
 app.use(cors());
+app.get("/", async (req, res) => {
+  res.send({ message: "Hello World" });
+});
 app.get("/lead_members/:id", async (req, res) => {
   const body = {
     selector: {
@@ -37,6 +40,8 @@ app.get("/lead_members/:id", async (req, res) => {
   res.send({ status: "200", message: "Ok", data: couchDBResponse });
 });
 
-app.listen(3001, () => {
-  console.log("listening on port 3001");
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`);
+  console.log("Press Ctrl+C to quit.");
 });
