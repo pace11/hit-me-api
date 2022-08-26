@@ -3,18 +3,18 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 const cors = require("cors");
 const helmet = require("helmet");
+const { statusMessage } = require("../utils");
 
 require("dotenv").config();
 const app = express();
-// adding Helmet to enhance your Rest API's security
-app.use(helmet());
-// using bodyParser to parse JSON bodies into JS objects
-app.use(bodyParser.json());
-// enabling CORS for all requests
-app.use(cors());
+app.use(helmet()); // security api
+app.use(bodyParser.json()); // body parser
+app.use(cors()); // handing cors
+
 app.get("/", async (req, res) => {
   res.send({ message: "Hello World" });
 });
+
 app.get("/lead_members/:id", async (req, res) => {
   const body = {
     selector: {
@@ -38,7 +38,12 @@ app.get("/lead_members/:id", async (req, res) => {
     },
   });
   const couchDBResponse = response.data.docs;
-  res.send({ status: "200", message: "Ok", data: couchDBResponse });
+  const statusCode = response.data.bookmark !== "nil" ? 200 : 404;
+  res.send({
+    status: statusCode,
+    message: statusMessage[statusCode],
+    data: statusCode === 200 ? couchDBResponse : null,
+  });
 });
 
 const PORT = process.env.PORT || 8080;
