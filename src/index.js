@@ -27,9 +27,14 @@ app.get("/lead_members/:id", async (req, res) => {
     limit: 1,
     skip: 0,
   };
+  const env = req.headers.environtment || "uat";
+  const urlApi = {
+    stg: `${process.env.API_MEMBER_KABAYAN_STG_COUCHDB}`,
+    uat: `${process.env.API_MEMBER_KABAYAN_UAT_COUCHDB}`,
+  };
   const response = await axios({
     method: "POST",
-    url: `${process.env.API_MEMBER_KABAYAN_UAT_COUCHDB}`,
+    url: urlApi[env],
     data: body,
     withCredentials: false,
     headers: {
